@@ -1,25 +1,18 @@
 import os
 from dotenv import load_dotenv
-from langchain_huggingface import HuggingFaceEndpoint, ChatHuggingFace
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import HumanMessage, AIMessage
 from langchain_classic.agents import AgentExecutor, create_tool_calling_agent
 from .tools import search_activities_in_db, search_flights_and_hotels, book_itinerary
+from langchain_groq import ChatGroq
 
 load_dotenv()
-if "HF_TOKEN" in os.environ:
-    pass
-else:
-    os.environ["HF_TOKEN"] = os.getenv("HF_TOKEN", "")
-endpoint = HuggingFaceEndpoint(
-    repo_id="meta-llama/Llama-3.3-70B-Instruct",
-    task="text-generation",
-    max_new_tokens=512,
-    temperature=0.1,
 
+llm = ChatGroq(
+    model="openai/gpt-oss-20b",
+    api_key=os.environ.get("GROQ_API_KEY"),
+    temperature=0.1
 )
-
-llm = ChatHuggingFace(llm=endpoint)
 
 tools = [search_activities_in_db, search_flights_and_hotels, book_itinerary]
 
@@ -42,6 +35,7 @@ REGOLE IMPORTANTI:
 - NON inventare i dati, usa ESCLUSIVAMENTE quelli restituiti dagli strumenti.
 - CONTROLLO DISPONIBILITÀ: Gli strumenti ti restituiranno il campo "available_dates" per gli hotel e le attività. DEVI LEGGERE ATTENTAMENTE queste date. NON DEVI MAI consigliare un hotel o un'attività se il mese richiesto dall'utente non è compreso nelle date di apertura. Le opzioni con "Tutto l'anno" vanno sempre bene.
 - PRENOTAZIONE: Se l'utente ti chiede esplicitamente di prenotare, confermare o salvare l'itinerario che gli hai appena proposto, DEVI usare lo strumento di prenotazione (book_itinerary) passando l'ID utente indicato qui sopra. Dopo aver usato lo strumento, conferma all'utente che il viaggio è stato prenotato con successo.
+- ESECUZIONE INVISIBILE: Non mostrare MAI all'utente il codice JSON o la dicitura "type: function" per chiamare gli strumenti. Gli strumenti vanno eseguiti silenziosamente in background. Attendi sempre di ricevere i risultati degli strumenti prima di dare la tua risposta finale.
 """
 
 prompt = ChatPromptTemplate.from_messages([
@@ -52,7 +46,7 @@ prompt = ChatPromptTemplate.from_messages([
 ])
 
 agent = create_tool_calling_agent(llm, tools, prompt)
-agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, max_iterations=3)
+agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
 
 def get_chat_response(user_message: str, history: list, user_id: str) -> str:

@@ -24,7 +24,11 @@ def seed_data():
         Flight(destination_country="Spagna", departure_airport="MXP (Milano)", arrival_airport="BCN (Barcellona)",
                date=datetime.date(2026, 7, 10), cost=150.0),
         Flight(destination_country="Spagna", departure_airport="BCN (Barcellona)", arrival_airport="MXP (Milano)",
-               date=datetime.date(2026, 7, 17), cost=180.0)
+               date=datetime.date(2026, 7, 17), cost=180.0),
+        Flight(destination_country="Spagna", departure_airport="MXP (Milano)", arrival_airport="BCN (Barcellona)",
+               date=datetime.date(2026, 10, 10), cost=150.0),
+        Flight(destination_country="Spagna", departure_airport="BCN (Barcellona)", arrival_airport="MXP (Milano)",
+               date=datetime.date(2026, 10, 17), cost=180.0)
     ]
     session.add_all(flights)
 
