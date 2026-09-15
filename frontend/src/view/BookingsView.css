@@ -1,0 +1,149 @@
+.bookings-view {
+    --bg: #15181B;
+    --surface: #1E2227;
+    --surface-border: #2C3137;
+    --text: #ECE9E1;
+    --text-dim: #8C9199;
+    --accent: #5B8AA6;
+    --error: #C1573A;
+
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Inter", "Segoe UI", sans-serif;
+}
+
+.bookings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--surface-border);
+}
+
+.bookings-header__title {
+    font-size: 19px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.bookings-header__back {
+    color: var(--text-dim);
+    font-size: 13px;
+    text-decoration: none;
+    border: 1px solid var(--surface-border);
+    padding: 7px 12px;
+    border-radius: 8px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.bookings-header__back:hover {
+    color: var(--text);
+    border-color: var(--accent);
+}
+
+.bookings-content {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 32px 24px;
+}
+
+.bookings-status {
+    color: var(--text-dim);
+    font-size: 14px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.bookings-status--error {
+    color: #E8A08D;
+}
+
+.bookings-empty {
+    text-align: center;
+    margin-top: 60px;
+}
+
+.bookings-empty__title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 8px;
+}
+
+.bookings-empty__text {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin: 0;
+}
+
+.bookings-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+.booking-card__destination {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 6px;
+}
+
+.booking-card__details {
+    color: var(--text-dim);
+    font-size: 13.5px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.booking-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.booking-card__body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.booking-card__delete {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1px solid var(--surface-border);
+    color: var(--text-dim);
+    border-radius: 9px;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.booking-card__delete:hover:not(:disabled) {
+    color: #E8A08D;
+    border-color: rgba(193, 87, 58, 0.4);
+    background: rgba(193, 87, 58, 0.1);
+}
+
+.booking-card__delete:disabled {
+    cursor: default;
+    opacity: 0.6;
+}
+
+.booking-card__spinner {
+    width: 13px;
+    height: 13px;
+    border: 2px solid var(--surface-border);
+    border-top-color: var(--text-dim);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}

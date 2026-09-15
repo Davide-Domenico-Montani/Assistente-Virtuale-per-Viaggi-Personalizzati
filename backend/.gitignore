@@ -1,0 +1,6 @@
+serviceAccountKey.json
+.env
+
+*.db
+travel_agency.db
+chroma_db/
