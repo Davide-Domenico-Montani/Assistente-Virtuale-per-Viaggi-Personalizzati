@@ -1,12 +1,8 @@
 import chromadb
 from chromadb.utils import embedding_functions
-from sqlalchemy.orm import Session
 from sqlalchemy import extract, or_
 from langchain_core.tools import tool
 from .model import Booking
-import datetime
-from typing import Optional
-
 from .db.database import SessionLocal, get_db
 from .model import Flight, Hotel, Activity
 
@@ -31,16 +27,17 @@ def search_activities_in_db(city: str, preferences: str) -> str:
     Usa questo strumento per cercare attività ed esperienze turistiche nel database.
 
     DEVI passare esattamente questi due parametri:
-    - city: La nazione o la città di interesse (es. 'Barcellona', 'Spagna'). Non usare la chiave 'city'.
+    - city: La nazione o la città di interesse (es. 'Barcellona', 'Spagna').
     - preferences: Le preferenze o gli interessi dell'utente (es. 'relax', 'sport', 'cultura').
     """
     if not city:
         return "Errore: devi specificare una città."
+
     query_text = f"Attività a {city} per {preferences}"
 
     results = collection.query(
         query_texts=[query_text],
-        n_results=2
+        n_results=10
     )
 
     if not results['documents'] or not results['documents'][0]:
@@ -50,22 +47,30 @@ def search_activities_in_db(city: str, preferences: str) -> str:
 
     try:
         activities_str = ""
+        trovate = 0
+
         for idx, doc in enumerate(results['documents'][0]):
             metadata = results['metadatas'][0][idx]
             activity_id = metadata.get('activity_id')
 
-            available_dates = "Date non specificate"
             if activity_id:
                 db_activity = db.query(Activity).filter(Activity.id == activity_id).first()
-                if db_activity:
-                    available_dates = db_activity.available_dates
 
-            activities_str += f"- Attività: {doc} (Target: {metadata.get('target')}) | Date disponibili: {available_dates}\n"
+                if db_activity and city.lower() in db_activity.city.lower():
+                    available_dates = db_activity.available_dates
+                    costo = db_activity.cost
+
+                    activities_str += f"- {db_activity.name}: {doc} (Target: {metadata.get('target')}) | Date disponibili: {available_dates} | Costo: {costo}€\n"
+                    trovate += 1
+            if trovate >= 3:
+                break
+
+        if not activities_str:
+            return f"Nessuna attività disponibile a {city} per la preferenza: {preferences}."
 
         return activities_str
     finally:
         db.close()
-
 
 @tool
 def search_flights_and_hotels(destination: str, month: int) -> str:

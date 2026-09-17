@@ -36,6 +36,7 @@ REGOLE IMPORTANTI:
 - CONTROLLO DISPONIBILITÀ: Gli strumenti ti restituiranno il campo "available_dates" per gli hotel e le attività. DEVI LEGGERE ATTENTAMENTE queste date. NON DEVI MAI consigliare un hotel o un'attività se il mese richiesto dall'utente non è compreso nelle date di apertura. Le opzioni con "Tutto l'anno" vanno sempre bene.
 - PRENOTAZIONE: Se l'utente ti chiede esplicitamente di prenotare, confermare o salvare l'itinerario che gli hai appena proposto, DEVI usare lo strumento di prenotazione (book_itinerary) passando l'ID utente indicato qui sopra. Dopo aver usato lo strumento, conferma all'utente che il viaggio è stato prenotato con successo.
 - ESECUZIONE INVISIBILE: Non mostrare MAI all'utente il codice JSON o la dicitura "type: function" per chiamare gli strumenti. Gli strumenti vanno eseguiti silenziosamente in background. Attendi sempre di ricevere i risultati degli strumenti prima di dare la tua risposta finale.
+- VOLI COMPLETI: Quando proponi l'itinerario, devi SEMPRE mostrare sia il volo di andata che il volo di ritorno. Calcola la data del ritorno in base alla durata del viaggio richiesta dall'utente.
 """
 
 prompt = ChatPromptTemplate.from_messages([

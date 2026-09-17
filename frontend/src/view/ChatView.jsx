@@ -3,6 +3,8 @@ import { useChatViewModel } from '../viewModel/useChatViewModel';
 import { useLogoutViewModel } from '../viewModel/useLogoutViewModel';
 import './ChatView.css';
 import {Link} from "react-router-dom";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const ChatView = () => {
     const { messages, isLoading, error, sendMessage } = useChatViewModel();
@@ -64,7 +66,10 @@ const ChatView = () => {
                 {messages.map((msg, i) => (
                     <div key={i} className={`chat-row chat-row--${msg.role}`}>
                         <div className="chat-bubble">
-                            {msg.content}
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {msg.content}
+                            </ReactMarkdown>
+
                         </div>
                     </div>
                 ))}
